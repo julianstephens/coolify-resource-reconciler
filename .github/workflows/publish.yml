@@ -26,4 +26,4 @@ jobs:
       - name: Build Package
         run: pnpm build
       - name: Publish Package
-        run: pnpm publish --access public
+        run: pnpm publish --access public --tag ${{ github.ref }}
