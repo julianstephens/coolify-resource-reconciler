@@ -1,0 +1,46 @@
+{
+  "name": "coolify-resource-reconciler",
+  "version": "1.0.0",
+  "description": "Coolify resource reconciler for idempotent deployments",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "resource-reconciler": "dist/cli.js"
+  },
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "build": "tsup",
+    "clean": "rm -rf dist node_modules",
+    "lint": "eslint src/",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "coolify",
+    "iac",
+    "infrastructure-as-code",
+    "deployment",
+    "reconciler",
+    "docker",
+    "devops"
+  ],
+  "author": "Julian Stephens",
+  "license": "MIT",
+  "packageManager": "pnpm@10.18.3",
+  "dependencies": {
+    "@commander-js/extra-typings": "^14.0.0",
+    "commander": "^14.0.2",
+    "pino": "^10.1.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@tsconfig/node-ts": "^23.6.1",
+    "@tsconfig/node24": "^24.0.1",
+    "@types/node": "^24.10.0",
+    "eslint": "^9.39.1",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.7"
+  }
+}
