@@ -8,6 +8,11 @@
   "bin": {
     "resource-reconciler": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "tsx src/cli.ts",
     "build": "tsup",
