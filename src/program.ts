@@ -268,12 +268,13 @@ export function createInitCommand() {
         }
       };
 
-      const getRepoInfo = (): { owner: string; name: string } | null => {
+      const getRepoInfo = (): { owner: string; name: string; } | null => {
         try {
           const remoteUrl = execSync("git config --get remote.origin.url").toString().trim();
-          const match = remoteUrl.match(/github\.com[/:]([\w.-]+)\/([\w.-]+)(\.git)?/);
+          const match = remoteUrl.match(/github\.com[/:]([\w.-]+)\/([\w.-]+)/);
           if (match && match[1] && match[2]) {
-            return { owner: match[1], name: match[2] };
+            const name = match[2].replace(/\.git$/, "");
+            return { owner: match[1], name: name };
           }
           return null;
         } catch {
@@ -281,10 +282,10 @@ export function createInitCommand() {
         }
       };
 
-      const getPnpmWorkspaces = (): Array<{ name: string; path: string }> => {
+      const getPnpmWorkspaces = (): Array<{ name: string; path: string; }> => {
         try {
           const output = execSync("pnpm list -r --json --depth -1").toString();
-          const workspaces = JSON.parse(output) as Array<{ name: string; path: string }>;
+          const workspaces = JSON.parse(output) as Array<{ name: string; path: string; }>;
           return workspaces.filter((w) => w.name && w.path);
         } catch {
           console.error("Failed to get pnpm workspaces. Is pnpm installed and are you in a monorepo?");
@@ -339,7 +340,7 @@ export function createInitCommand() {
         envSecretName: string;
         domains: string;
         portsExposes: string;
-        healthCheck: { path: string; port: string };
+        healthCheck: { path: string; port: string; };
       }> = [];
 
       for (const workspace of allWorkspaces) {
@@ -353,7 +354,7 @@ export function createInitCommand() {
         console.log(`[INFO] Processing "${pkgName}"...`);
         const packageJsonPath = join(absolutePath, "package.json");
 
-        let pkg: { description?: string };
+        let pkg: { description?: string; };
         try {
           const pkgContent = await readFile(packageJsonPath, "utf-8");
           pkg = JSON.parse(pkgContent);
