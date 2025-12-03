@@ -183,7 +183,7 @@ export class CoolifyClient {
       this.logger.debug({ projectId }, "[DRY RUN] Would list environments for project");
       return [];
     }
-    const result = await this.request<{ data: CoolifyEnvironment[]; }>(
+    const result = await this.request<{ data: CoolifyEnvironment[] }>(
       "GET",
       `/api/v1/projects/${projectId}/environments`,
     );
@@ -222,9 +222,7 @@ export class CoolifyClient {
   /**
    * Creates a new Docker image-based application.
    */
-  async createDockerImageApplication(
-    options: CreateDockerImageAppOptions,
-  ): Promise<CoolifyApplication> {
+  async createDockerImageApplication(options: CreateDockerImageAppOptions): Promise<CoolifyApplication> {
     if (this.dryRun) {
       this.logger.info({ options }, "[DRY RUN] Would create Docker image application");
       return {
@@ -265,10 +263,7 @@ export class CoolifyClient {
    */
   async updateEnvironmentVariables(uuid: string, envVars: CoolifyEnvVar[]): Promise<void> {
     if (this.dryRun) {
-      this.logger.info(
-        { uuid, envVarCount: envVars.length },
-        "[DRY RUN] Would update environment variables",
-      );
+      this.logger.info({ uuid, envVarCount: envVars.length }, "[DRY RUN] Would update environment variables");
       return;
     }
 

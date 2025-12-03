@@ -5,9 +5,7 @@ export const envSchema = z.object({
   COOLIFY_TOKEN: z.string().min(1).describe("Coolify API token"),
   MANIFEST_PATH: z.string().min(1).optional(),
   DOCKER_IMAGE_TAG: z.string().min(1).optional(),
-  LOG_LEVEL: z
-    .enum(["trace", "debug", "info", "warn", "error", "fatal"])
-    .default("info"),
+  LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error", "fatal"]).default("info"),
   DRY_RUN: z
     .string()
     .optional()

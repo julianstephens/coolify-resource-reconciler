@@ -64,15 +64,9 @@ export function parseEnvFile(content: string): Record<string, string> {
     let value = match[2];
 
     // Handle quoted values and mismatched quotes
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1);
-    } else if (
-      (value.startsWith('"') && !value.endsWith('"')) ||
-      (value.startsWith("'") && !value.endsWith("'"))
-    ) {
+    } else if ((value.startsWith('"') && !value.endsWith('"')) || (value.startsWith("'") && !value.endsWith("'"))) {
       // Mismatched quotes detected, skip this line or document the behavior
       // Optionally, log a warning here if a logger is available
       continue;
@@ -133,10 +127,7 @@ export class Reconciler {
     );
 
     // Check if the environment exists
-    const environment = await this.client.findEnvironmentByName(
-      manifest.projectId,
-      manifest.environmentName,
-    );
+    const environment = await this.client.findEnvironmentByName(manifest.projectId, manifest.environmentName);
 
     if (!environment) {
       this.logger.error(
@@ -209,10 +200,7 @@ export class Reconciler {
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        this.logger.error(
-          { resource: resource.name, error: errorMessage },
-          "Failed to reconcile resource",
-        );
+        this.logger.error({ resource: resource.name, error: errorMessage }, "Failed to reconcile resource");
         results.push({
           name: resource.name,
           action: "failed",
@@ -223,10 +211,7 @@ export class Reconciler {
     }
 
     const success = totalFailed === 0;
-    this.logger.info(
-      { success, totalCreated, totalUpdated, totalFailed },
-      "Reconciliation complete",
-    );
+    this.logger.info({ success, totalCreated, totalUpdated, totalFailed }, "Reconciliation complete");
 
     return {
       success,
@@ -281,10 +266,7 @@ export class Reconciler {
     // Update environment variables if provided
     if (envVars.length > 0) {
       await this.client.updateEnvironmentVariables(uuid, envVars);
-      this.logger.info(
-        { resource: resource.name, uuid, envVarCount: envVars.length },
-        "Updated environment variables",
-      );
+      this.logger.info({ resource: resource.name, uuid, envVarCount: envVars.length }, "Updated environment variables");
     }
 
     // Trigger deployment

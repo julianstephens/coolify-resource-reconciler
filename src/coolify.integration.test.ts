@@ -81,9 +81,7 @@ describe("Coolify Client - Introspection for Init Command", () => {
         },
       ];
 
-      vi.spyOn(client, "listApplications").mockResolvedValueOnce(
-        existingApps as unknown as never,
-      );
+      vi.spyOn(client, "listApplications").mockResolvedValueOnce(existingApps as unknown as never);
 
       // Simulate finding an app for enrichment
       const appName = "my-service";
@@ -108,9 +106,7 @@ describe("Coolify Client - Introspection for Init Command", () => {
         },
       ];
 
-      vi.spyOn(client, "listApplications").mockResolvedValueOnce(
-        existingApps as unknown as never,
-      );
+      vi.spyOn(client, "listApplications").mockResolvedValueOnce(existingApps as unknown as never);
 
       const foundApp = await client.findApplicationByName("my-service");
 

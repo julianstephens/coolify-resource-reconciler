@@ -1,11 +1,5 @@
 // Export types and functions for use as a library
-export {
-  parseManifest,
-  safeParseManifest,
-  manifestSchema,
-  resourceSchema,
-  healthCheckSchema,
-} from "./manifest.js";
+export { parseManifest, safeParseManifest, manifestSchema, resourceSchema, healthCheckSchema } from "./manifest.js";
 export type { Manifest, Resource, HealthCheck } from "./manifest.js";
 
 export { CoolifyClient } from "./coolify.js";

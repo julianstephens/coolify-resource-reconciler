@@ -18,11 +18,7 @@ export async function createProgram() {
     .name("cdeploy")
     .description("A tool to deploy and manage resources in Coolify using a manifest file.")
     .version(pkg.version)
-    .option(
-      "-m, --manifest <path>",
-      "Path to coolify.manifest.json file",
-      process.env.MANIFEST_PATH,
-    )
+    .option("-m, --manifest <path>", "Path to coolify.manifest.json file", process.env.MANIFEST_PATH)
     .option("-s, --server-uuid <uuid>", "Coolify server UUID (overrides manifest)")
     .option("-d, --dry-run", "Run without making changes", process.env.DRY_RUN === "true");
 
@@ -82,12 +78,7 @@ export function createApplyCommand() {
           "Manifest loaded successfully",
         );
 
-        const client = new CoolifyClient(
-          env.COOLIFY_ENDPOINT_URL,
-          env.COOLIFY_TOKEN,
-          logger,
-          dryRun,
-        );
+        const client = new CoolifyClient(env.COOLIFY_ENDPOINT_URL, env.COOLIFY_TOKEN, logger, dryRun);
 
         const envSecrets: Record<string, string> = {};
         for (const key in process.env) {
@@ -173,12 +164,7 @@ export function createStateCommand() {
           process.exit(0);
         }
 
-        const client = new CoolifyClient(
-          env.COOLIFY_ENDPOINT_URL,
-          env.COOLIFY_TOKEN,
-          logger,
-          globalOptions.dryRun,
-        );
+        const client = new CoolifyClient(env.COOLIFY_ENDPOINT_URL, env.COOLIFY_TOKEN, logger, globalOptions.dryRun);
 
         const allowedKeys = new Set([
           "exists",
@@ -250,11 +236,7 @@ export function createInitCommand() {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   const command = new Command<[], {}, ProgramOptions>("init")
     .description("Initialize a new coolify.manifest.json by scanning the monorepo")
-    .option(
-      "-o, --output <path>",
-      "Output path for the manifest file",
-      "./coolify.manifest.json",
-    )
+    .option("-o, --output <path>", "Output path for the manifest file", "./coolify.manifest.json")
     .option(
       "-p, --project-id <id>",
       "Coolify project ID (for introspection of existing resources)",
@@ -286,7 +268,7 @@ export function createInitCommand() {
         }
       };
 
-      const getRepoInfo = (): { owner: string; name: string; } | null => {
+      const getRepoInfo = (): { owner: string; name: string } | null => {
         try {
           const remoteUrl = execSync("git config --get remote.origin.url").toString().trim();
           const match = remoteUrl.match(/github\.com[/:]([\w.-]+)\/([\w.-]+)(\.git)?/);
@@ -299,10 +281,10 @@ export function createInitCommand() {
         }
       };
 
-      const getPnpmWorkspaces = (): Array<{ name: string; path: string; }> => {
+      const getPnpmWorkspaces = (): Array<{ name: string; path: string }> => {
         try {
           const output = execSync("pnpm list -r --json --depth -1").toString();
-          const workspaces = JSON.parse(output) as Array<{ name: string; path: string; }>;
+          const workspaces = JSON.parse(output) as Array<{ name: string; path: string }>;
           return workspaces.filter((w) => w.name && w.path);
         } catch {
           console.error("Failed to get pnpm workspaces. Is pnpm installed and are you in a monorepo?");
@@ -326,7 +308,7 @@ export function createInitCommand() {
 
       // Initialize Coolify client for introspection if project ID is provided
       let coolifyClient: CoolifyClient | null = null;
-      let existingApps: Record<string, unknown> = {};
+      const existingApps: Record<string, unknown> = {};
 
       if (options.projectId) {
         const env = parseEnv();
@@ -335,9 +317,7 @@ export function createInitCommand() {
         const logger = createLogger({ ...env, LOG_LEVEL: "silent" });
         coolifyClient = new CoolifyClient(env.COOLIFY_ENDPOINT_URL, env.COOLIFY_TOKEN, logger);
 
-        console.log(
-          `[INFO] Introspecting Coolify project '${options.projectId}' for existing resources...`,
-        );
+        console.log(`[INFO] Introspecting Coolify project '${options.projectId}' for existing resources...`);
 
         try {
           const allApps = await coolifyClient.listApplications();
@@ -345,7 +325,7 @@ export function createInitCommand() {
             existingApps[(app as unknown as Record<string, unknown>).name as string] = app;
           }
           console.log(`[INFO] Found ${Object.keys(existingApps).length} existing applications.`);
-        } catch (err) {
+        } catch {
           console.warn(
             "[WARN] Failed to introspect Coolify. Will generate manifest without existing resource details.",
           );
@@ -359,7 +339,7 @@ export function createInitCommand() {
         envSecretName: string;
         domains: string;
         portsExposes: string;
-        healthCheck: { path: string; port: string; };
+        healthCheck: { path: string; port: string };
       }> = [];
 
       for (const workspace of allWorkspaces) {
@@ -373,7 +353,7 @@ export function createInitCommand() {
         console.log(`[INFO] Processing "${pkgName}"...`);
         const packageJsonPath = join(absolutePath, "package.json");
 
-        let pkg: { description?: string; };
+        let pkg: { description?: string };
         try {
           const pkgContent = await readFile(packageJsonPath, "utf-8");
           pkg = JSON.parse(pkgContent);
@@ -384,9 +364,7 @@ export function createInitCommand() {
 
         const exposedPort = await getExposedPort(dockerfilePath);
         if (!exposedPort) {
-          console.warn(
-            `[WARN] No EXPOSE instruction found in Dockerfile for "${pkgName}". Defaulting to 8080.`,
-          );
+          console.warn(`[WARN] No EXPOSE instruction found in Dockerfile for "${pkgName}". Defaulting to 8080.`);
         }
 
         const resourceNameSuffix = pkgName.split("/")[1] || pkgName;
@@ -406,20 +384,11 @@ export function createInitCommand() {
               ((existingApp as Record<string, unknown>).docker_registry_image_name as string) ||
               `ghcr.io/${repoInfo.owner}/${repoInfo.name}-${resourceNameSuffix}`,
             envSecretName: `COOLIFY_ENV_${resourceNameSuffix.toUpperCase().replace(/-/g, "_")}`,
-            domains:
-              ((existingApp as Record<string, unknown>).fqdn as string) || "app.example.com",
-            portsExposes:
-              ((existingApp as Record<string, unknown>).ports_exposes as string) ||
-              exposedPort ||
-              "8080",
+            domains: ((existingApp as Record<string, unknown>).fqdn as string) || "app.example.com",
+            portsExposes: ((existingApp as Record<string, unknown>).ports_exposes as string) || exposedPort || "8080",
             healthCheck: {
-              path:
-                ((existingApp as Record<string, unknown>).health_check_path as string) ||
-                "/health",
-              port:
-                ((existingApp as Record<string, unknown>).health_check_port as string) ||
-                exposedPort ||
-                "8080",
+              path: ((existingApp as Record<string, unknown>).health_check_path as string) || "/health",
+              port: ((existingApp as Record<string, unknown>).health_check_port as string) || exposedPort || "8080",
             },
           });
         } else {
@@ -439,9 +408,7 @@ export function createInitCommand() {
       }
 
       if (allResources.length === 0) {
-        console.warn(
-          "[WARN] Scan complete. No workspaces with a Dockerfile were found. No manifest generated.",
-        );
+        console.warn("[WARN] Scan complete. No workspaces with a Dockerfile were found. No manifest generated.");
         process.exit(0);
       }
 
@@ -457,14 +424,10 @@ export function createInitCommand() {
       await writeFile(manifestPath, JSON.stringify(rootManifest, null, 2));
 
       console.log("[INFO] --------------------------------------------------");
-      console.log(
-        `[SUCCESS] Scan complete. Generated root manifest with ${allResources.length} resource(s).`,
-      );
+      console.log(`[SUCCESS] Scan complete. Generated root manifest with ${allResources.length} resource(s).`);
       console.log(`[SUCCESS] File created at: ${manifestPath}`);
       if (!options.projectId) {
-        console.warn(
-          "[WARN] ACTION REQUIRED: Open coolify.manifest.json and replace placeholder values.",
-        );
+        console.warn("[WARN] ACTION REQUIRED: Open coolify.manifest.json and replace placeholder values.");
       }
 
       process.exit(0);

@@ -7,26 +7,14 @@ export const healthCheckSchema = z.object({
   path: z.string().min(1).describe("Health check endpoint path"),
   port: z.string().regex(/^\d+$/, "Port must be a numeric string"),
   host: z.string().default("localhost").optional().describe("Optional host for health check"),
-  method: z
-    .literal(["GET", "POST"])
-    .default("GET")
-    .optional()
-    .describe("HTTP method for health check"),
-  scheme: z
-    .literal(["http", "https"])
-    .default("http")
-    .optional()
-    .describe("HTTP scheme for health check"),
+  method: z.literal(["GET", "POST"]).default("GET").optional().describe("HTTP method for health check"),
+  scheme: z.literal(["http", "https"]).default("http").optional().describe("HTTP scheme for health check"),
   returnCode: z.number().default(200).optional().describe("Expected HTTP return code"),
   responseText: z.string().default("").optional().describe("Expected HTTP response text"),
   interval: z.number().default(60).optional().describe("Interval between health checks in seconds"),
   timeout: z.number().default(60).optional().describe("Timeout for each health check in seconds"),
   retries: z.number().default(5).optional().describe("Number of retries for each health check"),
-  startPeriod: z
-    .number()
-    .default(0)
-    .optional()
-    .describe("Initial delay before starting health checks in seconds"),
+  startPeriod: z.number().default(0).optional().describe("Initial delay before starting health checks in seconds"),
 });
 
 /**

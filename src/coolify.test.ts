@@ -192,9 +192,7 @@ describe("CoolifyClient", () => {
       });
 
       const client = new CoolifyClient("https://coolify.example.com", "test-token", mockLogger);
-      await expect(client.findEnvironmentByName("project-1", "any-env")).rejects.toThrow(
-        "Internal Server Error",
-      );
+      await expect(client.findEnvironmentByName("project-1", "any-env")).rejects.toThrow("Internal Server Error");
     });
   });
 
@@ -225,29 +223,16 @@ describe("CoolifyClient", () => {
     });
 
     it("should not make API calls in dry run mode for update", async () => {
-      const client = new CoolifyClient(
-        "https://coolify.example.com",
-        "test-token",
-        mockLogger,
-        true,
-      );
+      const client = new CoolifyClient("https://coolify.example.com", "test-token", mockLogger, true);
 
       await client.updateApplication("app-uuid", { name: "Updated App" });
 
       expect(mockFetch).not.toHaveBeenCalled();
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        expect.anything(),
-        "[DRY RUN] Would update application",
-      );
+      expect(mockLogger.info).toHaveBeenCalledWith(expect.anything(), "[DRY RUN] Would update application");
     });
 
     it("should not make API calls in dry run mode for deploy", async () => {
-      const client = new CoolifyClient(
-        "https://coolify.example.com",
-        "test-token",
-        mockLogger,
-        true,
-      );
+      const client = new CoolifyClient("https://coolify.example.com", "test-token", mockLogger, true);
 
       await client.deployApplication("app-uuid");
 

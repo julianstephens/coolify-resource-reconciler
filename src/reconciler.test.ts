@@ -304,10 +304,7 @@ describe("Reconciler", () => {
 
       expect(result.success).toBe(false);
       expect(result.totalFailed).toBe(manifest.resources.length);
-      expect(mockClient.findEnvironmentByName).toHaveBeenCalledWith(
-        "test-project-uuid",
-        "production",
-      );
+      expect(mockClient.findEnvironmentByName).toHaveBeenCalledWith("test-project-uuid", "production");
       expect(mockLogger.error).toHaveBeenCalledWith(
         {
           projectId: "test-project-uuid",
@@ -343,10 +340,7 @@ describe("Reconciler", () => {
 
       expect(result.success).toBe(true);
       expect(result.totalCreated).toBe(1);
-      expect(mockClient.findEnvironmentByName).toHaveBeenCalledWith(
-        "test-project-uuid",
-        "production",
-      );
+      expect(mockClient.findEnvironmentByName).toHaveBeenCalledWith("test-project-uuid", "production");
       expect(mockLogger.error).not.toHaveBeenCalledWith(
         expect.any(Object), // The first argument is an object with metadata
         "Target environment does not exist in Coolify project",

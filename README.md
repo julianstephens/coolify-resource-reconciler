@@ -54,6 +54,7 @@ Options:
 # Run from your repository root
 cdeploy init
 ```
+
 This creates a `coolify.manifest.json` with placeholder values.
 
 **Option 2: Generate Manifest with Coolify Introspection**
@@ -68,6 +69,7 @@ cdeploy init \
   --project-id "your-project-id" \
   --environment production
 ```
+
 The manifest will be auto-populated with real values from matching applications in your Coolify project.
 
 ### 2. `apply` - Apply a Manifest
@@ -137,26 +139,22 @@ The `coolify.manifest.json` file declares the desired state of your resources.
 
 ## Environment Variables
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `COOLIFY_ENDPOINT_URL` | Yes | Coolify server base URL |
-| `COOLIFY_TOKEN` | Yes | Coolify API token |
-| `MANIFEST_PATH` | No | Path to manifest file (can use CLI arg) |
-| `DOCKER_IMAGE_TAG` | No | Docker image tag to deploy (can use CLI arg) |
-| `COOLIFY_ENV_*` | No | `.env` formatted content for an application (e.g., `COOLIFY_ENV_MY_APP`) |
-| `LOG_LEVEL` | No | Log level: trace, debug, info, warn, error, fatal (default: info) |
-| `DRY_RUN` | No | Set to "true" for dry run mode |
+| Variable               | Required | Description                                                              |
+| ---------------------- | -------- | ------------------------------------------------------------------------ |
+| `COOLIFY_ENDPOINT_URL` | Yes      | Coolify server base URL                                                  |
+| `COOLIFY_TOKEN`        | Yes      | Coolify API token                                                        |
+| `MANIFEST_PATH`        | No       | Path to manifest file (can use CLI arg)                                  |
+| `DOCKER_IMAGE_TAG`     | No       | Docker image tag to deploy (can use CLI arg)                             |
+| `COOLIFY_ENV_*`        | No       | `.env` formatted content for an application (e.g., `COOLIFY_ENV_MY_APP`) |
+| `LOG_LEVEL`            | No       | Log level: trace, debug, info, warn, error, fatal (default: info)        |
+| `DRY_RUN`              | No       | Set to "true" for dry run mode                                           |
 
 ## Library Usage
 
 You can also use this package as a library:
 
 ```typescript
-import {
-  CoolifyClient,
-  Reconciler,
-  parseManifest,
-} from "coolify-deploy";
+import { CoolifyClient, Reconciler, parseManifest } from "coolify-deploy";
 
 // Parse manifest
 const manifest = parseManifest(manifestData);
@@ -196,11 +194,11 @@ console.log(result.success, result.totalCreated, result.totalUpdated);
 
 ### Required GitHub Secrets
 
-| Secret | Description |
-| --- | --- |
-| `COOLIFY_ENDPOINT_URL` | Coolify server base URL (e.g., `https://coolify.example.com`) |
-| `COOLIFY_TOKEN` | Coolify API token (from Keys & Tokens in Coolify dashboard) |
-| `COOLIFY_ENV_*` | `.env` formatted content for an application's environment variables |
+| Secret                 | Description                                                         |
+| ---------------------- | ------------------------------------------------------------------- |
+| `COOLIFY_ENDPOINT_URL` | Coolify server base URL (e.g., `https://coolify.example.com`)       |
+| `COOLIFY_TOKEN`        | Coolify API token (from Keys & Tokens in Coolify dashboard)         |
+| `COOLIFY_ENV_*`        | `.env` formatted content for an application's environment variables |
 
 ## Development
 
