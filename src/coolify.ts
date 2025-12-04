@@ -25,7 +25,7 @@ export type {
   CoolifyEnvVarResponse,
   CoolifyInitiateDeployResponse,
   CoolifyServer,
-  CoolifyUpdateAppOptions
+  CoolifyUpdateAppOptions,
 } from "./types";
 
 /**
