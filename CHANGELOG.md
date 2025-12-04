@@ -1,3 +1,8 @@
+## v0.2.0
+
+- Enforces strict validation on the manifest file. This ensures that typos in configuration keys (like `healthcheck` instead of `healthCheck`) are caught immediately instead of being silently ignored.
+- Adds debug logging for application update payloads to help troubleshoot configuration issues.
+
 ## v0.1.8
 
 - Optimizes deployment polling to run concurrently. Instead of waiting for each application to finish deploying one by one, the tool now triggers all deployments first and then waits for them in parallel, significantly reducing total runtime.

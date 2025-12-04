@@ -57,7 +57,7 @@ export const resourceSchema = z.object({
     .describe("Comma-separated list of ports to expose"),
   /** Health check configuration */
   healthCheck: healthCheckSchema.optional().describe("Health check configuration for the application"),
-});
+}).strict();
 
 /**
  * Schema for the complete Coolify manifest file.

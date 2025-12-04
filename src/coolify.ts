@@ -179,6 +179,7 @@ export class CoolifyClient {
     }
 
     this.logger.info({ uuid, name: options.name }, "Updating application");
+    this.logger.debug({ uuid, options }, "Update application payload");
     await this.request("PATCH", `/api/v1/applications/${uuid}`, options);
   }
 
