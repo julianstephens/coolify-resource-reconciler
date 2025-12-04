@@ -71,7 +71,12 @@ export class CoolifyClient {
       if (contentType?.includes("application/json")) {
         error = (await response.json()) as CoolifyApiError;
       }
-      const errorMessage = error?.message ?? `HTTP ${response.status}: ${response.statusText}`;
+      let errorMessage = error?.message ?? `HTTP ${response.status}: ${response.statusText}`;
+
+      if (response.status === 401 || response.status === 403) {
+        errorMessage += " - Check your API token permissions (scope).";
+      }
+
       this.logger.error(
         {
           method,
@@ -236,9 +241,10 @@ export class CoolifyClient {
 
     this.logger.info({ uuid }, "Triggering deployment");
     // Coolify uses POST for API-triggered deploys (GET is for webhook-based deploys)
+    // Note: The API documentation says "You can only use uuid or tag, not both."
+    // We are deploying a specific application by UUID, so we should not send a tag.
     const response = await this.request<CoolifyInitiateDeployResponse>("POST", `/api/v1/deploy`, {
       uuid,
-      tag: "latest",
     });
     return response?.deployments?.[0]?.deployment_uuid ?? null;
   }

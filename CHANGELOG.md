@@ -1,3 +1,8 @@
+## v0.1.7
+
+- Improves error messages for API permission errors (401/403) to explicitly suggest checking token scopes.
+- Fixes deployment trigger error "You can only use uuid or tag, not both" by removing the redundant `tag` parameter when deploying by `uuid`.
+
 ## v0.1.6
 
 - Extends types to match API documentation

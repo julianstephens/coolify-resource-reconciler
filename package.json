@@ -1,6 +1,6 @@
 {
   "name": "coolify-deploy",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A lightweight Infrastructure as Code (IaC) tool for managing and deploying Docker applications to Coolify",
   "type": "module",
   "main": "dist/index.js",

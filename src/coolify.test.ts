@@ -276,7 +276,7 @@ describe("CoolifyClient", () => {
         "https://coolify.example.com/api/v1/deploy",
         expect.objectContaining({
           method: "POST",
-          body: JSON.stringify({ uuid: "app-uuid", tag: "latest" }),
+          body: JSON.stringify({ uuid: "app-uuid" }),
         }),
       );
     });
