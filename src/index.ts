@@ -6,9 +6,9 @@ export { CoolifyClient } from "./coolify";
 export type {
   CoolifyApiError,
   CoolifyApplication,
+  CoolifyCreateDockerImageAppOptions,
   CoolifyEnvVar,
-  CreateDockerImageAppOptions,
-  UpdateAppOptions,
+  CoolifyUpdateAppOptions,
 } from "./coolify";
 
 export { envVarsToCoolifyFormat, parseEnvFile, Reconciler } from "./reconciler";

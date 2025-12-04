@@ -15,6 +15,7 @@ import type {
 } from "./types";
 
 export type {
+  CoolifyApiError,
   CoolifyApplication,
   CoolifyCreateDockerImageAppOptions,
   CoolifyCreateUpdateAppResponse,
