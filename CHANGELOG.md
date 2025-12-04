@@ -1,3 +1,8 @@
+## v0.2.3
+
+- Fixed bug where `custom_healthcheck_found` was still in use during app update.
+- Fixed bug where apps without a network config failed creation due to missing `portsExposes` field
+
 ## v0.2.2
 
 - Aligned with Coolify API changes by removing the deprecated custom_healthcheck_found field from application update payloads. This resolves validation errors when updating

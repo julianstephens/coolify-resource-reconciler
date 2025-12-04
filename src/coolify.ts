@@ -321,12 +321,13 @@ export class CoolifyClient {
       name: resource.name,
       description: resource.description,
       domains: resource.domains || undefined,
-      ports_exposes: resource.portsExposes || undefined,
       instant_deploy: false, // We'll deploy after setting env vars
     };
 
     if (resource.portsExposes) {
       options.ports_exposes = resource.portsExposes;
+    } else {
+      options.ports_exposes = "8888";
     }
 
     if (resource.healthCheck) {
@@ -342,9 +343,6 @@ export class CoolifyClient {
       options.health_check_timeout = resource.healthCheck.timeout;
       options.health_check_retries = resource.healthCheck.retries;
       options.health_check_start_period = resource.healthCheck.startPeriod;
-      // Force custom health check to be found/used
-      // @ts-expect-error - This property is not in the types but is required by the API
-      options.custom_healthcheck_found = true;
     }
 
     return options;
@@ -376,9 +374,6 @@ export class CoolifyClient {
       options.health_check_timeout = resource.healthCheck.timeout;
       options.health_check_retries = resource.healthCheck.retries;
       options.health_check_start_period = resource.healthCheck.startPeriod;
-      // Force custom health check to be found/used
-      // @ts-expect-error - This property is not in the types but is required by the API
-      options.custom_healthcheck_found = true;
     }
 
     return options;
